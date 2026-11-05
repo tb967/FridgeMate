@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f3f7f0">
+    <title>FridgeMate | Your Kitchen Companion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="auth-container">
+        <div class="background-glow glow-one"></div>
+        <div class="background-glow glow-two"></div>
+
+        <section class="auth-card">
+            <a class="brand" href="index.html" aria-label="FridgeMate home">
+                <span class="brand-icon">🥑</span>
+                <span>Fridge<span class="brand-accent">Mate</span></span>
+            </a>
+
+            <div class="welcome-section">
+                <span class="eyebrow">
+                    <span class="status-dot"></span>
+                    YOUR KITCHEN, SIMPLIFIED
+                </span>
+
+                <h1 id="form-title">Welcome back!</h1>
+                <p id="form-description">
+                    Your ingredients have been waiting. Let's get cooking.
+                </p>
+            </div>
+
+            <div class="auth-tabs" role="tablist" aria-label="Account options">
+                <button
+                    id="login-tab"
+                    class="tab active"
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                >
+                    Log in
+                </button>
+
+                <button
+                    id="register-tab"
+                    class="tab"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Create account
+                </button>
+            </div>
+
+            <form id="auth-form">
+                <div class="form-field">
+                    <label for="email">Email address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="form-field">
+                    <label for="password">Password</label>
+
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            minlength="8"
+                            required
+                        >
+                        <button
+                            class="password-toggle"
+                            type="button"
+                            data-target="password"
+                            aria-label="Show password"
+                        >
+                            Show
+                        </button>
+                    </div>
+
+                    <p class="field-hint" id="password-hint">
+                        Use at least 8 characters.
+                    </p>
+                </div>
+
+                <div class="form-field hidden" id="confirm-password-field">
+                    <label for="confirm-password">Confirm password</label>
+
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="confirm-password"
+                            name="confirm-password"
+                            placeholder="Enter your password again"
+                            autocomplete="new-password"
+                            minlength="8"
+                            disabled
+                        >
+                        <button
+                            class="password-toggle"
+                            type="button"
+                            data-target="confirm-password"
+                            aria-label="Show confirmation password"
+                        >
+                            Show
+                        </button>
+                    </div>
+
+                    <p class="field-hint" id="confirm-hint">
+                        Enter the same password again.
+                    </p>
+                </div>
+
+                <button
+                    id="submit-button"
+                    class="primary-button"
+                    type="submit"
+                >
+                    <span id="submit-text">Log in</span>
+                    <span class="button-arrow" aria-hidden="true">→</span>
+                </button>
+
+                <p
+                    id="auth-message"
+                    class="auth-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+            </form>
+
+            <div class="card-footer">
+                <span class="footer-leaf">✳</span>
+                Less waste. More delicious possibilities.
+            </div>
+        </section>
+
+        <p class="page-footer">
+            A little more creativity in every kitchen.
+        </p>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

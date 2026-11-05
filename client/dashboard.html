@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FridgeMate | Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="main-nav">
+        <a href="dashboard.html" class="nav-brand">FridgeMate</a>
+
+        <button
+            class="nav-toggle"
+            id="nav-toggle"
+            type="button"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+            aria-controls="nav-links"
+        >
+            ☰
+        </button>
+
+        <div class="nav-links" id="nav-links">
+            <a href="dashboard.html" class="active" aria-current="page">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="recipes.html">Recipes</a>
+            <a href="profile.html">Profile</a>
+            <button id="sign-out-button" class="nav-sign-out" type="button">
+                Sign out
+            </button>
+        </div>
+    </nav>
+
+    <main class="page-container">
+        <header class="page-header">
+            <p class="eyebrow">WELCOME TO FRIDGEMATE</p>
+            <h1>Your kitchen, organised.</h1>
+            <p>Less waste, better meals.</p>
+        </header>
+
+        <section class="inventory-list-section">
+            <p id="user-email"></p>
+            <h2>Your kitchen at a glance</h2>
+            <p>Your inventory and recipe suggestions will appear here.</p>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="navigation.js"></script>
+</body>
+
+</html>

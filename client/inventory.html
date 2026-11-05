@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FridgeMate | My Inventory</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="main-nav">
+        <a href="dashboard.html" class="nav-brand">FridgeMate</a>
+
+        <button
+            class="nav-toggle"
+            id="nav-toggle"
+            type="button"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+            aria-controls="nav-links"
+        >
+            ☰
+        </button>
+
+        <div class="nav-links" id="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html" class="active" aria-current="page">
+                Inventory
+            </a>
+            <a href="recipes.html">Recipes</a>
+            <a href="profile.html">Profile</a>
+            <button id="sign-out-button" class="nav-sign-out" type="button">
+                Sign out
+            </button>
+        </div>
+    </nav>
+
+    <main class="page-container">
+        <header class="page-header">
+            <p class="eyebrow">YOUR KITCHEN</p>
+            <h1>My Inventory</h1>
+            <p>Keep track of your ingredients and use them before they expire.</p>
+        </header>
+
+        <p id="inventory-message" role="status">
+            Loading your ingredients...
+        </p>
+
+        <section class="inventory-layout">
+            <form id="inventory-form" class="inventory-form">
+                <h2>Add an ingredient</h2>
+
+                <label for="ingredient-name">Ingredient name</label>
+                <input id="ingredient-name" type="text"
+                    placeholder="e.g. Milk" required>
+
+                <label for="ingredient-quantity">Quantity</label>
+                <input id="ingredient-quantity" type="number"
+                    min="0.01" step="any" placeholder="e.g. 1" required>
+
+                <label for="ingredient-unit">Unit</label>
+                <select id="ingredient-unit" required>
+                    <option value="item">Item(s)</option>
+                    <option value="g">Grams (g)</option>
+                    <option value="kg">Kilograms (kg)</option>
+                    <option value="ml">Millilitres (ml)</option>
+                    <option value="l">Litres (l)</option>
+                    <option value="pack">Pack(s)</option>
+                </select>
+
+                <label for="ingredient-category">Category</label>
+                <select id="ingredient-category" required>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Fruit">Fruit</option>
+                    <option value="Vegetables">Vegetables</option>
+                    <option value="Meat">Meat</option>
+                    <option value="Fish">Fish</option>
+                    <option value="Grains">Grains</option>
+                    <option value="Canned goods">Canned goods</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="ingredient-expiry">Expiry date (optional)</label>
+                <input id="ingredient-expiry" type="date">
+
+                <button type="submit" id="add-ingredient-button">
+                    + Add ingredient
+                </button>
+            </form>
+
+            <section class="inventory-list-section">
+                <h2>Your ingredients</h2>
+                <div id="inventory-list" aria-live="polite">
+                    <p>Your ingredients will appear here.</p>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="inventory.js"></script>
+    <script src="navigation.js"></script>
+</body>
+</html>

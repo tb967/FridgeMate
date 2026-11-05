@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FridgeMate | Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="dashboard.html" class="nav-brand">FridgeMate</a>
+
+        <button class="nav-toggle" id="nav-toggle" type="button"
+            aria-label="Toggle navigation" aria-expanded="false"
+            aria-controls="nav-links">☰</button>
+
+        <div class="nav-links" id="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="recipes.html">Recipes</a>
+            <a href="profile.html" class="active" aria-current="page">Profile</a>
+            <button id="sign-out-button" class="nav-sign-out" type="button">
+                Sign out
+            </button>
+        </div>
+    </nav>
+
+    <main class="page-container">
+        <header class="page-header">
+            <p class="eyebrow">YOUR ACCOUNT</p>
+            <h1>My profile</h1>
+            <p>Manage your FridgeMate account details.</p>
+        </header>
+
+        <section class="inventory-list-section profile-section">
+            <h2>Account details</h2>
+
+            <p id="profile-message" role="status" aria-live="polite">
+                Loading your profile...
+            </p>
+
+            <form id="profile-form" class="inventory-form" hidden>
+                <label for="profile-name">Your name</label>
+                <input id="profile-name" type="text"
+                    placeholder="Enter your name" maxlength="80">
+
+                <label for="profile-email">Email address</label>
+                <input id="profile-email" type="email" readonly>
+
+                <button type="submit" id="save-profile-button">
+                    Save changes
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="profile.js"></script>
+    <script src="navigation.js"></script>
+</body>
+</html>

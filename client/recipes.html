@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FridgeMate | Recipes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="dashboard.html" class="nav-brand">FridgeMate</a>
+
+        <button class="nav-toggle" id="nav-toggle" type="button"
+            aria-label="Toggle navigation" aria-expanded="false"
+            aria-controls="nav-links">☰</button>
+
+        <div class="nav-links" id="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="recipes.html" class="active" aria-current="page">Recipes</a>
+            <a href="profile.html">Profile</a>
+            <button id="sign-out-button" class="nav-sign-out" type="button">
+                Sign out
+            </button>
+        </div>
+    </nav>
+
+    <main class="page-container">
+        <header class="page-header">
+            <p class="eyebrow">MAKE SOMETHING DELICIOUS</p>
+            <h1>Recipe ideas</h1>
+            <p>Turn the ingredients you already have into your next meal.</p>
+        </header>
+
+        <section class="inventory-list-section recipe-generator">
+            <h2>Find your next recipe</h2>
+            <p>
+                We'll use your inventory to help you find meals, prioritising
+                ingredients that are nearing their expiry dates.
+            </p>
+
+            <form id="recipe-form" class="inventory-form">
+                <label for="dietary-preference">Dietary preference</label>
+                <select id="dietary-preference">
+                    <option value="none">No preference</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="high-protein">High protein</option>
+                    <option value="dairy-free">Dairy-free</option>
+                </select>
+
+                <label for="cooking-time">Maximum cooking time</label>
+                <select id="cooking-time">
+                    <option value="15">15 minutes</option>
+                    <option value="30" selected>30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">60 minutes</option>
+                </select>
+
+                <label for="extra-ingredients">Ingredients to include (optional)</label>
+                <input id="extra-ingredients" type="text"
+                    placeholder="e.g. chicken, tomatoes">
+
+                <button type="submit" id="generate-recipes-button">
+                    Find recipes
+                </button>
+            </form>
+
+            <p id="recipe-message" role="status" aria-live="polite">
+                Your recipe suggestions will appear here.
+            </p>
+        </section>
+
+        <section class="inventory-list-section">
+    <h2>Ingredients available</h2>
+    <p>These are the ingredients currently in your inventory.</p>
+
+    <div id="available-ingredients">
+        <p>Loading your ingredients...</p>
+    </div>
+</section>
+
+<section class="inventory-list-section recipe-results">
+    <h2>Suggested recipes</h2>
+    <div id="recipe-list">
+        <p>Your recipe suggestions will appear here.</p>
+    </div>
+</section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="recipes.js"></script>
+    <script src="navigation.js"></script>
+</body>
+</html>
