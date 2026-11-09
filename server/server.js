@@ -1,4 +1,3 @@
-
 /*
 
 Functionalities:
@@ -16,20 +15,29 @@ require("dotenv").config({
 
 const express = require("express");
 const cors = require("cors");
-const pool = require("./db");
-
 const supabase = require("./supabase");
 const { createAuthenticatedClient } = require("./supabase");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-    origin: [
-        "http://127.0.0.1:5500",
-        "http://localhost:5500"
-    ]
-}));
+// Browser origins allowed to call this API. Set CLIENT_ORIGIN in .env as a
+// comma-separated list (e.g. your deployed site). Defaults cover VS Code
+// Live Server during local development.
+const allowedOrigins = (
+    process.env.CLIENT_ORIGIN || "http://localhost:5500,http://127.0.0.1:5500"
+)
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+app.use(
+    cors({
+        origin: allowedOrigins,
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type", "Authorization"]
+    })
+);
 
 app.use(express.json({ limit: "20kb" }));
 
@@ -57,24 +65,6 @@ app.get("/", (req, res) => {
     res.json({
         message: "FridgeMate server is running!"
     });
-});
-
-// Test the original local PostgreSQL connection
-app.get("/db-test", async (req, res) => {
-    try {
-        const result = await pool.query("SELECT NOW()");
-
-        res.json({
-            message: "Database connection successful!",
-            time: result.rows[0].now
-        });
-    } catch (error) {
-        console.error("Database connection error:", error.message);
-
-        res.status(500).json({
-            message: "Database connection failed."
-        });
-    }
 });
 
 // Test the Supabase connection
