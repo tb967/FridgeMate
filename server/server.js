@@ -17,6 +17,10 @@ const express = require("express");
 const cors = require("cors");
 const supabase = require("./supabase");
 const { createAuthenticatedClient } = require("./supabase");
+const {
+    generateValidatedRecipes,
+    RecipeValidationError
+} = require("./recipeValidation");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -295,41 +299,19 @@ Use this exact structure:
 Nutritional values must be approximate estimates per serving.
 `;
 
-        // 7. Send the request to Gemini
+        // 7 and 8. Ask Gemini for recipes, then validate them.
+        // Retries once if the reply is unusable (see recipeValidation.js).
         const ai = await getGeminiClient();
 
-        const interaction = await ai.interactions.create({
+        const validRecipes = await generateValidatedRecipes({
+            ai,
             model: "gemini-3.5-flash-lite",
-            input: prompt,
-            store: false
+            prompt,
+            maxCookingTime: cookingTime
         });
 
-        // 8. Extract and parse the AI response
-        let responseText = interaction.output_text;
-
-        if (!responseText) {
-            throw new Error("Gemini returned an empty response.");
-        }
-
-        responseText = responseText.trim();
-
-        // Remove code fences if Gemini includes them
-        responseText = responseText
-            .replace(/^```(?:json)?\s*/i, "")
-            .replace(/\s*```$/, "");
-
-        const recipesData = JSON.parse(responseText);
-
-        if (
-            !recipesData ||
-            !Array.isArray(recipesData.recipes) ||
-            recipesData.recipes.length !== 3
-        ) {
-            throw new Error("Gemini returned an invalid recipe response.");
-        }
-
         // 9. Save the generated recipes to Supabase
-const recipesToSave = recipesData.recipes.map((recipe) => ({
+const recipesToSave = validRecipes.map((recipe) => ({
     user_id: user.id,
     title: recipe.title,
     description: recipe.description,
@@ -371,7 +353,7 @@ const recipesForFrontend = savedRecipes.map((recipe, index) => ({
         fat_g: recipe.fat_g
     },
     usedExpiringIngredients:
-        recipesData.recipes[index]?.usedExpiringIngredients || []
+        validRecipes[index]?.usedExpiringIngredients || []
 }));
 
 res.json({
@@ -381,6 +363,14 @@ res.json({
 
     } catch (error) {
         console.error("Recipe generation error:", error);
+
+        // Gemini replied twice, but neither reply was usable.
+        if (error instanceof RecipeValidationError) {
+            return res.status(502).json({
+                message: "Gemini couldn't create usable recipes this time. Please try again.",
+                code: "AI_INVALID_RESPONSE"
+            });
+        }
 
         if (
             error.message &&
