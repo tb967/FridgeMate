@@ -1,4 +1,3 @@
-
 /*
 
 Functionalities:
@@ -16,18 +15,12 @@ require("dotenv").config({
 
 const express = require("express");
 const cors = require("cors");
-<<<<<<< HEAD
-=======
-const pool = require("./db");
-
->>>>>>> f4cceda7f1ab34110752355ea6bacf6e9a335f21
 const supabase = require("./supabase");
 const { createAuthenticatedClient } = require("./supabase");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-<<<<<<< HEAD
 // Browser origins allowed to call this API. Set CLIENT_ORIGIN in .env as a
 // comma-separated list (e.g. your deployed site). Defaults cover VS Code
 // Live Server during local development.
@@ -45,15 +38,6 @@ app.use(
         allowedHeaders: ["Content-Type", "Authorization"]
     })
 );
-
-app.use(express.json());
-=======
-app.use(cors({
-    origin: [
-        "http://127.0.0.1:5500",
-        "http://localhost:5500"
-    ]
-}));
 
 app.use(express.json({ limit: "20kb" }));
 
@@ -75,7 +59,6 @@ async function getGeminiClient() {
 
     return geminiClient;
 }
->>>>>>> f4cceda7f1ab34110752355ea6bacf6e9a335f21
 
 // Check that the Express server is running
 app.get("/", (req, res) => {
@@ -84,27 +67,6 @@ app.get("/", (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-=======
-// Test the original local PostgreSQL connection
-app.get("/db-test", async (req, res) => {
-    try {
-        const result = await pool.query("SELECT NOW()");
-
-        res.json({
-            message: "Database connection successful!",
-            time: result.rows[0].now
-        });
-    } catch (error) {
-        console.error("Database connection error:", error.message);
-
-        res.status(500).json({
-            message: "Database connection failed."
-        });
-    }
-});
-
->>>>>>> f4cceda7f1ab34110752355ea6bacf6e9a335f21
 // Test the Supabase connection
 app.get("/supabase-test", async (req, res) => {
     try {
