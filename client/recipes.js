@@ -492,7 +492,7 @@ async function generateRecipes(event) {
     generateButton.disabled = true;
     generateButton.textContent = "Generating recipes...";
     recipeMessage.textContent =
-        "Gemini is creating recipes using your ingredients. Please wait...";
+        "Our AI is creating recipes from your ingredients. This can take a few seconds...";
 
     recipeList.replaceChildren();
 
@@ -527,8 +527,19 @@ async function generateRecipes(event) {
 
         await loadSavedRecipes();
 
+        // Tell the user about any items the recipes left out.
+        const skipped = [
+            ...(result.expiredIngredients || []).map(
+                (name) => `${name} (expired)`
+            ),
+            ...(result.unusableIngredients || []).map(
+                (name) => `${name} (doesn't look like food)`
+            )
+        ];
+
         recipeMessage.textContent =
-            "Your recipes have been generated successfully!";
+            "Your recipes have been generated successfully!" +
+            (skipped.length > 0 ? ` Not used: ${skipped.join(", ")}.` : "");
 
     } catch (error) {
         console.error("Recipe generation error:", error);
