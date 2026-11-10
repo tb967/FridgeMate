@@ -1,4 +1,3 @@
-
 /*
 
 Functionalities:
@@ -16,20 +15,33 @@ require("dotenv").config({
 
 const express = require("express");
 const cors = require("cors");
-const pool = require("./db");
-
 const supabase = require("./supabase");
 const { createAuthenticatedClient } = require("./supabase");
+const {
+    generateValidatedRecipes,
+    RecipeValidationError
+} = require("./recipeValidation");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-    origin: [
-        "http://127.0.0.1:5500",
-        "http://localhost:5500"
-    ]
-}));
+// Browser origins allowed to call this API. Set CLIENT_ORIGIN in .env as a
+// comma-separated list (e.g. your deployed site). Defaults cover VS Code
+// Live Server during local development.
+const allowedOrigins = (
+    process.env.CLIENT_ORIGIN || "http://localhost:5500,http://127.0.0.1:5500"
+)
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+app.use(
+    cors({
+        origin: allowedOrigins,
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type", "Authorization"]
+    })
+);
 
 app.use(express.json({ limit: "20kb" }));
 
@@ -57,24 +69,6 @@ app.get("/", (req, res) => {
     res.json({
         message: "FridgeMate server is running!"
     });
-});
-
-// Test the original local PostgreSQL connection
-app.get("/db-test", async (req, res) => {
-    try {
-        const result = await pool.query("SELECT NOW()");
-
-        res.json({
-            message: "Database connection successful!",
-            time: result.rows[0].now
-        });
-    } catch (error) {
-        console.error("Database connection error:", error.message);
-
-        res.status(500).json({
-            message: "Database connection failed."
-        });
-    }
 });
 
 // Test the Supabase connection
@@ -334,41 +328,19 @@ Use this exact structure:
 Nutritional values must be approximate estimates per serving.
 `;
 
-        // 7. Send the request to Gemini
+        // 7 and 8. Ask Gemini for recipes, then validate them.
+        // Retries once if the reply is unusable (see recipeValidation.js).
         const ai = await getGeminiClient();
 
-        const interaction = await ai.interactions.create({
+        const validRecipes = await generateValidatedRecipes({
+            ai,
             model: "gemini-3.5-flash-lite",
-            input: prompt,
-            store: false
+            prompt,
+            maxCookingTime: cookingTime
         });
 
-        // 8. Extract and parse the AI response
-        let responseText = interaction.output_text;
-
-        if (!responseText) {
-            throw new Error("Gemini returned an empty response.");
-        }
-
-        responseText = responseText.trim();
-
-        // Remove code fences if Gemini includes them
-        responseText = responseText
-            .replace(/^```(?:json)?\s*/i, "")
-            .replace(/\s*```$/, "");
-
-        const recipesData = JSON.parse(responseText);
-
-        if (
-            !recipesData ||
-            !Array.isArray(recipesData.recipes) ||
-            recipesData.recipes.length !== 3
-        ) {
-            throw new Error("Gemini returned an invalid recipe response.");
-        }
-
         // 9. Save the generated recipes to Supabase
-const recipesToSave = recipesData.recipes.map((recipe) => ({
+const recipesToSave = validRecipes.map((recipe) => ({
     user_id: user.id,
     title: recipe.title,
     description: recipe.description,
@@ -410,7 +382,7 @@ const recipesForFrontend = savedRecipes.map((recipe, index) => ({
         fat_g: recipe.fat_g
     },
     usedExpiringIngredients:
-        recipesData.recipes[index]?.usedExpiringIngredients || []
+        validRecipes[index]?.usedExpiringIngredients || []
 }));
 
 res.json({
@@ -420,6 +392,14 @@ res.json({
 
     } catch (error) {
         console.error("Recipe generation error:", error);
+
+        // Gemini replied twice, but neither reply was usable.
+        if (error instanceof RecipeValidationError) {
+            return res.status(502).json({
+                message: "Gemini couldn't create usable recipes this time. Please try again.",
+                code: "AI_INVALID_RESPONSE"
+            });
+        }
 
         if (
             error.message &&
