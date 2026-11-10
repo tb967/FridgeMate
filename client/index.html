@@ -5,153 +5,247 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f3f7f0">
+    <meta name="description" content="Make the most of your ingredients with FridgeMate. Organise your fridge, discover AI-powered recipes and reduce food waste.">
     <title>FridgeMate | Your Kitchen Companion</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <main class="auth-container">
-        <div class="background-glow glow-one"></div>
-        <div class="background-glow glow-two"></div>
+<body class="landing-page">
 
-        <section class="auth-card">
-            <a class="brand" href="index.html" aria-label="FridgeMate home">
-                <span class="brand-icon">🥑</span>
-                <span>Fridge<span class="brand-accent">Mate</span></span>
+    <!-- Navigation -->
+    <header class="landing-header">
+        <nav class="landing-nav">
+            <a href="index.html" class="landing-brand" aria-label="FridgeMate home">
+                <span class="landing-brand-icon">F</span>
+                FridgeMate
             </a>
 
-            <div class="welcome-section">
-                <span class="eyebrow">
-                    <span class="status-dot"></span>
-                    YOUR KITCHEN, SIMPLIFIED
+            <div class="landing-nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+            </div>
+
+            <div class="landing-nav-actions">
+                <a href="login.html" class="landing-login-link">Log In</a>
+                <a href="login.html" class="landing-nav-button">Get Started</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- Hero Section -->
+        <section class="landing-hero">
+            <div class="landing-hero-content">
+                <span class="landing-eyebrow">
+                    YOUR SMARTER KITCHEN COMPANION
                 </span>
 
-                <h1 id="form-title">Welcome back!</h1>
-                <p id="form-description">
-                    Your ingredients have been waiting. Let's get cooking.
+                <h1>
+                    Make the most of
+                    <span>what's in your fridge.</span>
+                </h1>
+
+                <p>
+                    Discover delicious recipes, keep track of your ingredients
+                    and reduce food waste with a little help from FridgeMate.
                 </p>
+
+                <div class="landing-hero-actions">
+                    <a href="login.html" class="landing-primary-button">
+                        Get Started
+                        <span aria-hidden="true">&rarr;</span>
+                    </a>
+
+                    <a href="#how-it-works" class="landing-secondary-button">
+                        See How It Works
+                    </a>
+                </div>
+
+                <div class="landing-hero-note">
+                    <span aria-hidden="true">✓</span>
+                    Your ingredients. Your recipes. Less waste.
+                </div>
             </div>
 
-            <div class="auth-tabs" role="tablist" aria-label="Account options">
-                <button
-                    id="login-tab"
-                    class="tab active"
-                    type="button"
-                    role="tab"
-                    aria-selected="true"
-                >
-                    Log in
-                </button>
+            <!-- Hero Visual -->
+            <div class="landing-hero-visual">
+                <div class="landing-visual-decoration landing-decoration-one"></div>
+                <div class="landing-visual-decoration landing-decoration-two"></div>
 
-                <button
-                    id="register-tab"
-                    class="tab"
-                    type="button"
-                    role="tab"
-                    aria-selected="false"
-                >
-                    Create account
-                </button>
-            </div>
-
-            <form id="auth-form">
-                <div class="form-field">
-                    <label for="email">Email address</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="you@example.com"
-                        autocomplete="email"
-                        required
-                    >
-                </div>
-
-                <div class="form-field">
-                    <label for="password">Password</label>
-
-                    <div class="password-wrapper">
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Enter your password"
-                            autocomplete="current-password"
-                            minlength="8"
-                            required
-                        >
-                        <button
-                            class="password-toggle"
-                            type="button"
-                            data-target="password"
-                            aria-label="Show password"
-                        >
-                            Show
-                        </button>
+                <div class="landing-visual-card">
+                    <div class="landing-visual-top">
+                        <div>
+                            <span class="landing-visual-label">YOUR FRIDGE</span>
+                            <h2>Fresh ideas start here.</h2>
+                        </div>
+                        <span class="landing-fridge-icon" aria-hidden="true">🥑</span>
                     </div>
 
-                    <p class="field-hint" id="password-hint">
-                        Use at least 8 characters.
-                    </p>
-                </div>
+                    <div class="landing-ingredient-list">
+                        <div class="landing-ingredient">
+                            <span class="landing-ingredient-emoji">🥑</span>
+                            <div>
+                                <strong>Avocado</strong>
+                                <small>Fresh and ready to use</small>
+                            </div>
+                            <span class="landing-fresh-label">Fresh</span>
+                        </div>
 
-                <div class="form-field hidden" id="confirm-password-field">
-                    <label for="confirm-password">Confirm password</label>
+                        <div class="landing-ingredient">
+                            <span class="landing-ingredient-emoji">🥦</span>
+                            <div>
+                                <strong>Broccoli</strong>
+                                <small>Use within 2 days</small>
+                            </div>
+                            <span class="landing-expiry-label">Soon</span>
+                        </div>
 
-                    <div class="password-wrapper">
-                        <input
-                            type="password"
-                            id="confirm-password"
-                            name="confirm-password"
-                            placeholder="Enter your password again"
-                            autocomplete="new-password"
-                            minlength="8"
-                            disabled
-                        >
-                        <button
-                            class="password-toggle"
-                            type="button"
-                            data-target="confirm-password"
-                            aria-label="Show confirmation password"
-                        >
-                            Show
-                        </button>
+                        <div class="landing-ingredient">
+                            <span class="landing-ingredient-emoji">🥚</span>
+                            <div>
+                                <strong>Eggs</strong>
+                                <small>Fresh and ready to use</small>
+                            </div>
+                            <span class="landing-fresh-label">Fresh</span>
+                        </div>
                     </div>
 
-                    <p class="field-hint" id="confirm-hint">
-                        Enter the same password again.
-                    </p>
+                    <div class="landing-recipe-preview">
+                        <span class="landing-recipe-icon" aria-hidden="true">✨</span>
+                        <div>
+                            <strong>Something delicious?</strong>
+                            <p>Let AI turn your ingredients into recipes.</p>
+                        </div>
+                    </div>
                 </div>
 
-                <button
-                    id="submit-button"
-                    class="primary-button"
-                    type="submit"
-                >
-                    <span id="submit-text">Log in</span>
-                    <span class="button-arrow" aria-hidden="true">→</span>
-                </button>
-
-                <p
-                    id="auth-message"
-                    class="auth-message"
-                    role="status"
-                    aria-live="polite"
-                ></p>
-            </form>
-
-            <div class="card-footer">
-                <span class="footer-leaf">✳</span>
-                Less waste. More delicious possibilities.
+                <div class="landing-floating-note">
+                    <span aria-hidden="true">🌱</span>
+                    <div>
+                        <strong>Waste less</strong>
+                        <small>Make every ingredient count</small>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <p class="page-footer">
-            A little more creativity in every kitchen.
-        </p>
+        <!-- Features Section -->
+        <section class="landing-features" id="features">
+            <div class="landing-section-heading">
+                <span class="landing-eyebrow">WHAT MAKES FRIDGEMATE DIFFERENT?</span>
+                <h2>A little smarter. A lot less waste.</h2>
+                <p>
+                    Everything you need to make managing your kitchen
+                    easier and more enjoyable.
+                </p>
+            </div>
+
+            <div class="landing-feature-grid">
+                <article class="landing-feature-card">
+                    <div class="landing-feature-icon">🥬</div>
+                    <h3>Manage Your Inventory</h3>
+                    <p>
+                        Keep track of what's in your fridge, update quantities
+                        and stay on top of expiry dates.
+                    </p>
+                </article>
+
+                <article class="landing-feature-card">
+                    <div class="landing-feature-icon">✨</div>
+                    <h3>AI-Powered Recipes</h3>
+                    <p>
+                        Get creative recipe suggestions based on your
+                        ingredients, preferences and available cooking time.
+                    </p>
+                </article>
+
+                <article class="landing-feature-card">
+                    <div class="landing-feature-icon">🌍</div>
+                    <h3>Reduce Food Waste</h3>
+                    <p>
+                        Make better use of ingredients before they expire
+                        and avoid forgetting what's hiding in your fridge.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="landing-how-it-works" id="how-it-works">
+            <div class="landing-section-heading">
+                <span class="landing-eyebrow">GET STARTED IN THREE STEPS</span>
+                <h2>Your kitchen, organised.</h2>
+                <p>Getting started with FridgeMate couldn't be easier.</p>
+            </div>
+
+            <div class="landing-steps-grid">
+                <article class="landing-step">
+                    <span class="landing-step-number">01</span>
+                    <div class="landing-step-icon">🧺</div>
+                    <h3>Add Your Ingredients</h3>
+                    <p>
+                        Build your digital fridge by adding ingredients,
+                        quantities and expiry dates.
+                    </p>
+                </article>
+
+                <article class="landing-step">
+                    <span class="landing-step-number">02</span>
+                    <div class="landing-step-icon">🤖</div>
+                    <h3>Discover Recipes</h3>
+                    <p>
+                        Let AI suggest meals using what you already have,
+                        prioritising ingredients that need using soon.
+                    </p>
+                </article>
+
+                <article class="landing-step">
+                    <span class="landing-step-number">03</span>
+                    <div class="landing-step-icon">🍽️</div>
+                    <h3>Cook and Enjoy</h3>
+                    <p>
+                        Explore your recipes, follow the instructions
+                        and make the most of your ingredients.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Final Call to Action -->
+        <section class="landing-cta">
+            <div class="landing-cta-content">
+                <span class="landing-eyebrow">READY TO GET STARTED?</span>
+                <h2>Good food starts with what's already at home.</h2>
+                <p>
+                    Make your fridge work smarter. Discover what you can create
+                    with FridgeMate.
+                </p>
+                <a href="login.html" class="landing-primary-button">
+                    Get Started
+                    <span aria-hidden="true">&rarr;</span>
+                </a>
+            </div>
+        </section>
+
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-client.js"></script>
-    <script src="app.js"></script>
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <a href="index.html" class="landing-brand">
+            <span class="landing-brand-icon">F</span>
+            FridgeMate
+        </a>
+
+        <p>Your smarter kitchen companion.</p>
+
+        <div class="landing-footer-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="login.html">Log In</a>
+        </div>
+
+        <small>&copy; 2026 FridgeMate. All rights reserved.</small>
+    </footer>
+
 </body>
 </html>

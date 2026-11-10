@@ -26,33 +26,187 @@
         </div>
     </nav>
 
-    <main class="page-container">
+    <main class="page-container profile-page">
+
         <header class="page-header">
             <p class="eyebrow">YOUR ACCOUNT</p>
             <h1>My profile</h1>
-            <p>Manage your FridgeMate account details.</p>
+            <p>Manage your personal details and food preferences.</p>
         </header>
 
-        <section class="inventory-list-section profile-section">
-            <h2>Account details</h2>
+        <!-- Profile overview -->
+        <section class="profile-overview">
+            <div class="profile-avatar" id="profile-avatar">
+                <span id="profile-initials">U</span>
+            </div>
 
-            <p id="profile-message" role="status" aria-live="polite">
-                Loading your profile...
-            </p>
-
-            <form id="profile-form" class="inventory-form" hidden>
-                <label for="profile-name">Your name</label>
-                <input id="profile-name" type="text"
-                    placeholder="Enter your name" maxlength="80">
-
-                <label for="profile-email">Email address</label>
-                <input id="profile-email" type="email" readonly>
-
-                <button type="submit" id="save-profile-button">
-                    Save changes
-                </button>
-            </form>
+            <div class="profile-overview-text">
+                <h2 id="profile-display-name">Welcome!</h2>
+                <p>Manage your FridgeMate account below.</p>
+            </div>
         </section>
+
+        <div class="profile-layout">
+
+            <!-- Personal information -->
+            <section class="profile-card">
+                <div class="profile-card-heading">
+                    <h2>Personal information</h2>
+                    <p>Update your account details.</p>
+                </div>
+
+                <p id="profile-message" class="profile-message"
+                    role="status" aria-live="polite">
+                    Loading your profile...
+                </p>
+
+                <form id="profile-form" hidden>
+                    <div class="profile-form-group">
+                        <label for="profile-name">Full name</label>
+                        <input id="profile-name" type="text"
+                            placeholder="Enter your name" maxlength="80"
+                            required>
+                    </div>
+
+                    <div class="profile-form-group">
+                        <label for="profile-email">Email address</label>
+                        <input id="profile-email" type="email" readonly>
+                        <small>Your email address cannot be changed here.</small>
+                    </div>
+
+                    <button type="submit" id="save-profile-button"
+                        class="profile-button">
+                        Save changes
+                    </button>
+                </form>
+            </section>
+
+            <!-- Dietary preferences -->
+            <section class="profile-card">
+                <div class="profile-card-heading">
+                    <h2>Dietary preferences</h2>
+                    <p>Select all preferences that apply to you.</p>
+                </div>
+
+                <p id="dietary-message" class="profile-message"
+                    role="status" aria-live="polite">
+                    Loading your preferences...
+                </p>
+
+                <form id="dietary-form" hidden>
+                    <div class="dietary-options">
+
+                        <label class="dietary-option">
+                            <input type="checkbox" name="dietary-preference"
+                                value="vegetarian">
+                            <span>
+                                <strong>Vegetarian</strong>
+                                <small>No meat or fish</small>
+                            </span>
+                        </label>
+
+                        <label class="dietary-option">
+                            <input type="checkbox" name="dietary-preference"
+                                value="vegan">
+                            <span>
+                                <strong>Vegan</strong>
+                                <small>No animal products</small>
+                            </span>
+                        </label>
+
+                        <label class="dietary-option">
+                            <input type="checkbox" name="dietary-preference"
+                                value="pescatarian">
+                            <span>
+                                <strong>Pescatarian</strong>
+                                <small>Fish and seafood, but no meat</small>
+                            </span>
+                        </label>
+
+                        <label class="dietary-option">
+                            <input type="checkbox" name="dietary-preference"
+                                value="dairy-free">
+                            <span>
+                                <strong>Dairy-free</strong>
+                                <small>Avoids dairy products</small>
+                            </span>
+                        </label>
+
+                        <label class="dietary-option">
+                            <input type="checkbox" name="dietary-preference"
+                                value="gluten-free">
+                            <span>
+                                <strong>Gluten-free</strong>
+                                <small>Avoids gluten</small>
+                            </span>
+                        </label>
+
+                        <label class="dietary-option">
+                            <input type="checkbox" name="dietary-preference"
+                                value="nut-free">
+                            <span>
+                                <strong>Nut-free</strong>
+                                <small>Avoids nuts</small>
+                            </span>
+                        </label>
+
+                    </div>
+
+                    <button type="submit" id="save-dietary-button"
+                        class="profile-button">
+                        Save preferences
+                    </button>
+                </form>
+            </section>
+
+            
+<!-- Password and security -->
+<section class="profile-card">
+    <div class="profile-card-heading">
+        <h2>Account security</h2>
+        <p>Change your account password.</p>
+    </div>
+
+    <p id="password-message" class="profile-message"
+        role="status" aria-live="polite"></p>
+
+    <form id="password-form">
+        <div class="profile-form-group">
+            <label for="new-password">New password</label>
+            <input id="new-password" type="password"
+                placeholder="Enter a new password"
+                autocomplete="new-password"
+                minlength="8" required>
+
+            <div id="password-requirements"
+                class="password-requirements"
+                aria-live="polite">
+                <p>Password must meet all the requirements below.</p>
+                <div id="password-hint"></div>
+            </div>
+        </div>
+
+        <div class="profile-form-group">
+            <label for="confirm-password">Confirm new password</label>
+            <input id="confirm-password" type="password"
+                placeholder="Confirm your new password"
+                autocomplete="new-password"
+                minlength="8" required>
+
+            <p id="confirm-hint" class="field-hint"
+                aria-live="polite">
+                Enter the same password again.
+            </p>
+        </div>
+
+        <button type="submit" id="change-password-button"
+            class="profile-button">
+            Update password
+        </button>
+    </form>
+</section>
+
+        </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

@@ -34,19 +34,108 @@
         </div>
     </nav>
 
-    <main class="page-container">
-        <header class="page-header">
-            <p class="eyebrow">WELCOME TO FRIDGEMATE</p>
-            <h1>Your kitchen, organised.</h1>
-            <p>Less waste, better meals.</p>
-        </header>
+    
+<main class="page-container dashboard-container">
 
-        <section class="inventory-list-section">
-            <p id="user-email"></p>
+    <!-- Welcome section -->
+    <header class="page-header dashboard-header">
+        <p class="eyebrow">YOUR PERSONAL KITCHEN ASSISTANT</p>
+        <h1>Your kitchen, organised.</h1>
+        <p>Less waste, better meals. Here's what's happening in your kitchen.</p>
+        <p id="user-email" class="dashboard-user-email"></p>
+    </header>
+
+    <!-- Quick actions -->
+    <section class="dashboard-quick-actions">
+        <a href="inventory.html" class="dashboard-action">
+            <span>＋</span>
+            Add ingredients
+        </a>
+
+        <a href="recipes.html" class="dashboard-action">
+            <span>✦</span>
+            Generate recipes
+        </a>
+    </section>
+
+    <!-- Kitchen overview -->
+    <section class="dashboard-section">
+        <div class="dashboard-section-heading">
             <h2>Your kitchen at a glance</h2>
-            <p>Your inventory and recipe suggestions will appear here.</p>
+            <p>A quick overview of your FridgeMate activity.</p>
+        </div>
+
+        <div class="dashboard-stats">
+
+            <article class="dashboard-stat-card">
+                <div class="stat-icon">🥬</div>
+                <p>Total ingredients</p>
+                <h3 id="inventory-count">—</h3>
+                <span>Items in your inventory</span>
+            </article>
+
+            <article class="dashboard-stat-card">
+                <div class="stat-icon">⏰</div>
+                <p>Expiring soon</p>
+                <h3 id="expiring-count">—</h3>
+                <span>Ingredients to use soon</span>
+            </article>
+
+            <article class="dashboard-stat-card">
+                <div class="stat-icon">🍳</div>
+                <p>Recipes generated</p>
+                <h3 id="recipes-count">—</h3>
+                <span>Your generated recipes</span>
+            </article>
+
+            <article class="dashboard-stat-card">
+                <div class="stat-icon">♥</div>
+                <p>Favourite recipes</p>
+                <h3 id="favourites-count">—</h3>
+                <span>Recipes saved for later</span>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- Dashboard content -->
+    <div class="dashboard-content-grid">
+
+        <!-- Expiring ingredients -->
+        <section class="inventory-list-section dashboard-panel">
+            <div class="dashboard-section-heading">
+                <h2>Expiring soon</h2>
+                <p>Keep an eye on these ingredients to reduce food waste.</p>
+            </div>
+
+            <div id="expiring-list">
+                <p>Loading your ingredients...</p>
+            </div>
+
+            <a href="inventory.html" class="dashboard-view-link">
+                View all ingredients →
+            </a>
         </section>
-    </main>
+
+        <!-- Recently generated recipes -->
+        <section class="inventory-list-section dashboard-panel">
+            <div class="dashboard-section-heading">
+                <h2>Recent recipes</h2>
+                <p>Your latest AI-generated meal ideas.</p>
+            </div>
+
+            <div id="recent-recipes">
+                <p>Loading your recipes...</p>
+            </div>
+
+            <a href="recipes.html" class="dashboard-view-link">
+                Explore all recipes →
+            </a>
+        </section>
+
+    </div>
+
+</main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-client.js"></script>

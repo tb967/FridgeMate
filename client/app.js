@@ -66,8 +66,8 @@ function setAuthMode(registering) {
         : "current-password";
 
     passwordHint.textContent = registering
-        ? "Use at least 8 characters."
-        : "";
+    ? "Password must meet all the requirements below."
+    : "Enter your password.";
 
     passwordHint.className = "field-hint";
     confirmHint.textContent = "Enter the same password again.";
@@ -83,7 +83,54 @@ function setAuthMode(registering) {
         confirmPasswordInput.setCustomValidity("");
     }
 
+    updatePasswordRequirements();
     updatePasswordMatch();
+}
+
+function validatePassword(password) {
+    return {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[^A-Za-z0-9]/.test(password)
+    };
+}
+
+function updatePasswordRequirements() {
+    if (!isRegistering) {
+        return;
+    }
+
+    const requirements = validatePassword(passwordInput.value);
+
+    const messages = [
+        { key: "length", text: "At least 8 characters" },
+        { key: "uppercase", text: "At least one uppercase letter" },
+        { key: "lowercase", text: "At least one lowercase letter" },
+        { key: "number", text: "At least one number" },
+        { key: "special", text: "At least one special character" }
+    ];
+
+    passwordHint.replaceChildren();
+
+    messages.forEach((requirement) => {
+        const item = document.createElement("div");
+        const met = requirements[requirement.key];
+
+        item.textContent = `${met ? "✓" : "○"} ${requirement.text}`;
+        item.className = met ? "requirement met" : "requirement";
+
+        passwordHint.appendChild(item);
+    });
+
+    const allRequirementsMet = Object.values(requirements).every(Boolean);
+
+    passwordInput.setCustomValidity(
+        allRequirementsMet
+            ? ""
+            : "Please meet all password requirements."
+    );
 }
 
 function updatePasswordMatch() {
@@ -130,6 +177,7 @@ registerTab.addEventListener("click", () => setAuthMode(true));
 
 passwordInput.addEventListener("input", () => {
     clearMessage();
+    updatePasswordRequirements();
     updatePasswordMatch();
 });
 

@@ -22,6 +22,6 @@ if (navSignOut) {
             return;
         }
 
-        window.location.replace("index.html");
+        window.location.replace("login.html");
     });
 }

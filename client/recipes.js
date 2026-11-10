@@ -28,7 +28,7 @@ async function checkRecipePageSession() {
     const { data, error } = await supabaseClient.auth.getSession();
 
     if (error || !data.session) {
-        window.location.replace("index.html");
+        window.location.replace("login.html");
         return false;
     }
 
@@ -482,7 +482,7 @@ async function generateRecipes(event) {
         recipeMessage.textContent =
             "Your session has expired. Please log in again.";
 
-        window.location.replace("index.html");
+        window.location.replace("login.html");
         return;
     }
 

@@ -39,7 +39,7 @@ async function checkInventorySession() {
     const { data, error } = await supabaseClient.auth.getSession();
 
     if (error || !data.session) {
-        window.location.replace("index.html");
+        window.location.replace("login.html");
         return null;
     }
 
