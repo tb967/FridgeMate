@@ -1,4 +1,4 @@
-# 🍃 FridgeMate
+# FridgeMate
 
 **Your smarter kitchen companion.**
 
@@ -6,14 +6,14 @@ FridgeMate is an AI-powered food inventory and recipe management web application
 
 By combining inventory management with AI-generated recipe suggestions, FridgeMate aims to make meal planning easier, reduce food waste and help users make better use of their kitchen ingredients.
 
-## ✨ Features
+## Features
 
-### 🏠 Public Landing Page
+### Public Landing Page
 - Responsive landing page introducing FridgeMate and its main features.
 - Clear navigation to the login and registration pages.
 - Overview of how the application helps users manage ingredients and reduce food waste.
 
-### 🔐 User Authentication
+### User Authentication
 - User registration and login using Supabase Authentication.
 - Email and password authentication.
 - Email verification: new accounts confirm their email address through a link, which returns them to FridgeMate and signs them in.
@@ -31,13 +31,13 @@ Passwords must contain:
 - At least one number.
 - At least one special character.
 
-### 📊 Dashboard
+### Dashboard
 - Personalised dashboard for signed-in users.
 - Counts of inventory items, items expiring soon, generated recipes and favourites.
 - Lists of ingredients that are expiring soon and recently generated recipes.
 - Navigation to the inventory, recipes and profile sections.
 
-### 🥬 Ingredient Inventory Management
+### Ingredient Inventory Management
 - Add ingredients to a personal digital inventory.
 - Record ingredient names, quantities, units and categories.
 - Optionally add expiry dates.
@@ -54,7 +54,7 @@ Supported inventory units include:
 
 Ingredient categories include dairy, fruit, vegetables, meat, fish, grains, canned goods and other.
 
-### 🤖 AI-Powered Recipe Generation
+### AI-Powered Recipe Generation
 FridgeMate integrates Google's Gemini API to generate personalised recipes based on the user's available ingredients.
 
 Users can:
@@ -77,7 +77,7 @@ Recipe generation also protects against unsuitable ingredients:
 - **Items that aren't recognisable food** (for example gibberish, cleaning products or other non-food items) are never used. If nothing usable is left, no recipes are created and the user is told which items were skipped.
 - After generating, the page tells the user about any ingredients that were left out and why.
 
-### 🥗 Dietary Preferences
+### Dietary Preferences
 Users can save dietary preferences through their profile.
 
 Supported saved preferences include:
@@ -90,25 +90,25 @@ Supported saved preferences include:
 
 Saved preferences are combined with the dietary selection made when generating recipes, allowing the application to consider multiple requirements. Pescatarian, gluten-free and nut-free are currently available as saved profile preferences only, not in the recipe page's dropdown.
 
-### ❤️ Saved Recipes and Favourites
+### Saved Recipes and Favourites
 - Every generated recipe is saved automatically to the user's recipe list in Supabase.
 - Mark recipes as favourites and view them separately from generated recipes.
 - Remove recipes from favourites, or delete them when they are no longer needed.
 
-### 👤 User Profile
+### User Profile
 - View and update personal profile information.
 - Manage saved dietary preferences.
 - Change account passwords.
 - View account information associated with the signed-in user.
 
-### 📱 Responsive Design
+### Responsive Design
 - Responsive layouts for desktop and mobile devices.
 - Consistent green-themed interface.
 - Navigation designed to make the main application features easy to access.
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Technology | Purpose |
 |---|---|
@@ -126,7 +126,7 @@ Saved preferences are combined with the dietary selection made when generating r
 
 ---
 
-## 🏗️ Application Architecture
+## Application Architecture
 
 FridgeMate uses a frontend and backend architecture.
 
@@ -163,7 +163,7 @@ Google Gemini generates recipes based on the user's inventory and preferences. T
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 FridgeMate/
@@ -210,7 +210,7 @@ FridgeMate/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 Follow the instructions below to run FridgeMate locally.
 
@@ -399,7 +399,7 @@ Both the frontend and backend must be running for the full application, includin
 
 ---
 
-## 🔌 Backend API
+## Backend API
 
 The Express backend currently provides the following endpoints:
 
@@ -482,7 +482,7 @@ Every error response includes a `message` that can be shown to the user.
 
 ---
 
-## 🧪 Recipe Response Validation
+## Recipe Response Validation
 
 FridgeMate includes a dedicated validation module in `server/recipeValidation.js`.
 
@@ -507,7 +507,7 @@ This helps reduce the risk of malformed AI responses causing problems when savin
 
 ---
 
-## 🔒 Security Considerations
+## Security Considerations
 
 FridgeMate uses several measures to help protect user data:
 
@@ -527,7 +527,7 @@ Never commit API keys, passwords, Supabase secret keys or other sensitive creden
 
 ---
 
-## 🛡️ Your Data and Deleting Your Account
+## Your Data and Deleting Your Account
 
 FridgeMate is a bootcamp demonstration project, not a commercial service. The full privacy notice is in the app at [`client/privacy.html`](client/privacy.html), linked from the login page and the landing page footer.
 
@@ -549,7 +549,7 @@ The same address can be used to ask for a copy of your data, to correct it, or f
 
 ---
 
-## ⚖️ Data Protection Considerations
+## Data Protection Considerations
 
 FridgeMate is only intended for demonstration by the project team. These points were considered, and would need action before it was opened to real users:
 
@@ -562,7 +562,7 @@ FridgeMate is only intended for demonstration by the project team. These points 
 
 ---
 
-## ⚠️ Notes and Limitations
+## Notes and Limitations
 
 - Recipes are generated using AI and may occasionally require adjustments.
 - Nutritional information is approximate and should not be treated as professionally verified nutritional advice.
@@ -580,7 +580,7 @@ FridgeMate is only intended for demonstration by the project team. These points 
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 Potential areas for further development include:
 
@@ -599,13 +599,13 @@ Potential areas for further development include:
 
 ---
 
-## 📬 Contact
+## Contact
 
 For questions about FridgeMate, your data or deleting your account, email **[alyswilliams1@outlook.com](mailto:alyswilliams1@outlook.com)**.
 
 ---
 
-## 👩‍💻 Development
+## Development
 
 FridgeMate is developed using a frontend and backend structure, with a separate JavaScript file for each page and a dedicated module for validating AI responses.
 
