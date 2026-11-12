@@ -2119,3 +2119,9 @@ input:disabled {
 .welcome-section > p {
     margin-bottom: 26px;
 }
+
+/* Privacy notice link under the login form */
+.privacy-link {
+    margin-top: 16px;
+    text-align: center;
+}
