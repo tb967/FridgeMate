@@ -492,13 +492,19 @@ async function generateRecipes(event) {
     generateButton.disabled = true;
     generateButton.textContent = "Generating recipes...";
     recipeMessage.textContent =
-        "Gemini is creating recipes using your ingredients. Please wait...";
+        "Our AI is creating recipes from your ingredients. This can take a few seconds...";
 
     recipeList.replaceChildren();
 
     try {
+        // On Live Server (port 5500) the API runs separately on port 3000.
+        // Anywhere else, the server also serves these pages, so the API is
+        // on the same site and a relative address works.
+        const apiBaseUrl =
+            window.location.port === "5500" ? "http://localhost:3000" : "";
+
         const response = await fetch(
-            "http://localhost:3000/generate-recipes",
+            `${apiBaseUrl}/generate-recipes`,
             {
                 method: "POST",
                 headers: {
@@ -527,8 +533,19 @@ async function generateRecipes(event) {
 
         await loadSavedRecipes();
 
+        // Tell the user about any items the recipes left out.
+        const skipped = [
+            ...(result.expiredIngredients || []).map(
+                (name) => `${name} (expired)`
+            ),
+            ...(result.unusableIngredients || []).map(
+                (name) => `${name} (doesn't look like food)`
+            )
+        ];
+
         recipeMessage.textContent =
-            "Your recipes have been generated successfully!";
+            "Your recipes have been generated successfully!" +
+            (skipped.length > 0 ? ` Not used: ${skipped.join(", ")}.` : "");
 
     } catch (error) {
         console.error("Recipe generation error:", error);

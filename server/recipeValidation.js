@@ -8,6 +8,10 @@ Recipe validation for Gemini responses.
 3. generateValidatedRecipes() calls Gemini, validates the reply and, if it
    is invalid, tries once more and tells Gemini what was wrong.
 
+Gemini returns either 3 recipes, or 0 recipes when nothing in the
+inventory is usable food. Items it won't use (gibberish, non-food) are
+listed in "unusableIngredients".
+
 */
 
 const RECIPE_COUNT = 3;
@@ -17,9 +21,13 @@ const MAX_LIST_ITEMS = 30;
 const RECIPE_RESPONSE_SCHEMA = {
     type: "object",
     properties: {
+        unusableIngredients: {
+            type: "array",
+            items: { type: "string" }
+        },
         recipes: {
             type: "array",
-            minItems: RECIPE_COUNT,
+            minItems: 0,
             maxItems: RECIPE_COUNT,
             items: {
                 type: "object",
@@ -73,7 +81,7 @@ const RECIPE_RESPONSE_SCHEMA = {
             }
         }
     },
-    required: ["recipes"]
+    required: ["unusableIngredients", "recipes"]
 };
 
 // Thrown when Gemini's reply can't be used. Holds the list of problems.
@@ -239,7 +247,8 @@ function validateRecipe(recipe, position, maxCookingTime, problems) {
     };
 }
 
-// Check the whole response. Returns cleaned recipes or throws with every problem.
+// Check the whole response. Returns { recipes, unusableIngredients } with
+// cleaned values, or throws with every problem found.
 function validateRecipeResponse(data, maxCookingTime) {
     const problems = [];
 
@@ -247,9 +256,20 @@ function validateRecipeResponse(data, maxCookingTime) {
         throw new RecipeValidationError(['the response has no "recipes" list']);
     }
 
-    if (data.recipes.length !== RECIPE_COUNT) {
+    const unusableIngredients = Array.isArray(data.unusableIngredients)
+        ? data.unusableIngredients.filter(isNonEmptyString).map((name) => name.trim())
+        : [];
+
+    if (data.recipes.length !== 0 && data.recipes.length !== RECIPE_COUNT) {
         throw new RecipeValidationError([
-            `expected ${RECIPE_COUNT} recipes but got ${data.recipes.length}`
+            `expected ${RECIPE_COUNT} recipes (or 0 if nothing is usable food) but got ${data.recipes.length}`
+        ]);
+    }
+
+    // Returning no recipes is only allowed when Gemini says why.
+    if (data.recipes.length === 0 && unusableIngredients.length === 0) {
+        throw new RecipeValidationError([
+            'returned no recipes without listing any "unusableIngredients"'
         ]);
     }
 
@@ -257,11 +277,24 @@ function validateRecipeResponse(data, maxCookingTime) {
         validateRecipe(recipe, index + 1, maxCookingTime, problems)
     );
 
+    // A recipe must never use an item Gemini itself said is unusable.
+    const unusable = new Set(unusableIngredients.map((name) => name.toLowerCase()));
+
+    recipes.forEach((recipe, index) => {
+        (recipe?.ingredients || []).forEach((ingredient) => {
+            if (unusable.has(ingredient.name.toLowerCase())) {
+                problems.push(
+                    `recipe ${index + 1} uses "${ingredient.name}", which was listed as unusable`
+                );
+            }
+        });
+    });
+
     if (problems.length > 0) {
         throw new RecipeValidationError(problems);
     }
 
-    return recipes;
+    return { recipes, unusableIngredients };
 }
 
 // Ask Gemini for recipes, validate them, and retry once if they're invalid.
