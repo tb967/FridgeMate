@@ -148,7 +148,8 @@ h1 {
     letter-spacing: -1.2px;
 }
 
-#form-description {
+#form-description,
+.welcome-section > p {
     max-width: 330px;
     margin: 0 auto;
     color: var(--muted);
@@ -2085,4 +2086,36 @@ input:disabled {
     .landing-footer-links {
         gap: 15px;
     }
+}
+
+/* Links on the login, forgot password and reset password pages */
+.auth-link {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    color: var(--green-dark);
+    text-decoration: underline;
+}
+
+.forgot-link {
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.forgot-link.hidden {
+    display: none;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* Space between the intro text and the form on the password pages
+   (the login page has its tabs in this gap instead) */
+.welcome-section > p {
+    margin-bottom: 26px;
 }

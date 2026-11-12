@@ -19,6 +19,7 @@ const confirmPasswordField = document.getElementById(
 const passwordHint = document.getElementById("password-hint");
 const confirmHint = document.getElementById("confirm-hint");
 const authMessage = document.getElementById("auth-message");
+const forgotPasswordLink = document.getElementById("forgot-password-link");
 
 let isRegistering = false;
 
@@ -58,6 +59,7 @@ function setAuthMode(registering) {
         : "Your ingredients have been waiting. Let's get cooking.";
 
     confirmPasswordField.classList.toggle("hidden", !registering);
+    forgotPasswordLink.classList.toggle("hidden", registering);
     confirmPasswordInput.disabled = !registering;
     confirmPasswordInput.required = registering;
 
@@ -207,7 +209,15 @@ authForm.addEventListener("submit", async (event) => {
         if (isRegistering) {
             const { data, error } = await supabaseClient.auth.signUp({
                 email,
-                password
+                password,
+                options: {
+                    // After verifying, come back to this login page on
+                    // the same site (Live Server or the deployed site).
+                    emailRedirectTo: new URL(
+                        "login.html",
+                        window.location.href
+                    ).href
+                }
             });
 
             if (error) {
@@ -220,8 +230,13 @@ authForm.addEventListener("submit", async (event) => {
                     "success"
                 );
             } else {
+                // Supabase doesn't say whether the email is already
+                // registered (that would reveal who has an account), so
+                // this message covers both cases.
                 showMessage(
-                    "Account created! Check your email for a verification link before logging in.",
+                    "Check your email for a verification link. If you " +
+                        "already have an account, log in or reset your " +
+                        "password instead.",
                     "success"
                 );
             }
@@ -254,6 +269,58 @@ authForm.addEventListener("submit", async (event) => {
 });
 
 setAuthMode(false);
+
+// Handle arriving here from an email link (sign-up verification).
+async function handleEmailLink() {
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    const queryParams = new URLSearchParams(window.location.search);
+
+    const linkError =
+        hashParams.get("error_code") ||
+        queryParams.get("error_code") ||
+        hashParams.get("error") ||
+        queryParams.get("error");
+    const linkType = hashParams.get("type");
+
+    if (!linkError && !hashParams.has("access_token")) {
+        return;
+    }
+
+    // Wait for Supabase to read the sign-in details from the link...
+    const { data } = await supabaseClient.auth.getSession();
+
+    // ...then clear them from the address bar so they can't be shared.
+    window.history.replaceState(null, "", window.location.pathname);
+
+    if (linkError) {
+        showMessage(
+            linkError === "otp_expired"
+                ? "That link has expired or has already been used. Log in, or create your account again to get a new link."
+                : "That link isn't valid. Please log in or try again.",
+            "error"
+        );
+        return;
+    }
+
+    // A password reset link that landed here: finish it on its own page.
+    if (linkType === "recovery" && data.session) {
+        window.location.replace("reset-password.html");
+        return;
+    }
+
+    if (data.session) {
+        showMessage(
+            "Email verified! Taking you to your dashboard...",
+            "success"
+        );
+
+        setTimeout(() => {
+            window.location.replace("dashboard.html");
+        }, 1500);
+    }
+}
+
+handleEmailLink();
 
 // Restore and observe the Supabase session.
 supabaseClient.auth.onAuthStateChange((event, session) => {
