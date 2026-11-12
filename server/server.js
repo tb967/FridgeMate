@@ -45,6 +45,10 @@ app.use(
 
 app.use(express.json({ limit: "20kb" }));
 
+// Serve the website pages from the client folder, so the deployed site
+// and its API share one address. Only the client folder is public.
+app.use(express.static(require("path").join(__dirname, "..", "client")));
+
 // Gemini client - created when first needed
 let geminiClient;
 
@@ -65,7 +69,8 @@ async function getGeminiClient() {
 }
 
 // Check that the Express server is running
-app.get("/", (req, res) => {
+// ("/" now shows the website's landing page instead)
+app.get("/health", (req, res) => {
     res.json({
         message: "FridgeMate server is running!"
     });
