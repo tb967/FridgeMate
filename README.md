@@ -6,6 +6,8 @@ FridgeMate is an AI-powered food inventory and recipe management web application
 
 By combining inventory management with AI-generated recipe suggestions, FridgeMate aims to make meal planning easier, reduce food waste and help users make better use of their kitchen ingredients.
 
+**Live demo:** [https://fridgemate-api-6eqf.onrender.com](https://fridgemate-api-6eqf.onrender.com) (hosted on Render's free tier, so the first visit after a quiet spell can take up to a minute while the server wakes up).
+
 ## Features
 
 ### Public Landing Page
@@ -270,8 +272,8 @@ The initial migration also adds an event trigger that switches on RLS automatica
 
 **Configure the authentication URLs.** In the Supabase Dashboard, go to **Authentication → URL Configuration**:
 
-- **Site URL:** the address of the login page, for example `http://127.0.0.1:5500/client/login.html` for local development, or `https://your-deployed-site/login.html` once deployed.
-- **Redirect URLs:** add `http://127.0.0.1:5500/**` and `http://localhost:5500/**` for local development, plus your deployed address followed by `/**`.
+- **Site URL:** the address of the login page, for example `http://127.0.0.1:5500/client/login.html` for local development, or `https://fridgemate-api-6eqf.onrender.com/login.html` for the live site.
+- **Redirect URLs:** add `http://127.0.0.1:5500/**` and `http://localhost:5500/**` for local development, plus the live address followed by `/**` (for example `https://fridgemate-api-6eqf.onrender.com/**`).
 
 Email verification and password reset links only return users to addresses on this list. Without it, those links will not reach the FridgeMate pages.
 
@@ -396,6 +398,64 @@ http://127.0.0.1:5500/client/index.html
 When opened through Live Server on port 5500, the recipe page sends recipe requests to the backend at `http://localhost:3000`. If Live Server opens on a different port (for example because another Live Server window is already open), close the other window or add the new address to `CLIENT_ORIGIN`.
 
 Both the frontend and backend must be running for the full application, including AI recipe generation, to work correctly.
+
+---
+
+## Deployment
+
+FridgeMate is deployed as a single **Render Web Service**. The Express server serves both the API and the pages in the `client` folder, so the website and the server share one address and no CORS setup is needed in production.
+
+**Live site:** [https://fridgemate-api-6eqf.onrender.com](https://fridgemate-api-6eqf.onrender.com)
+
+### Render settings
+
+| Setting | Value |
+|---|---|
+| Service type | Web Service |
+| Source | This GitHub repository (`main` branch) |
+| Region | Frankfurt (EU), the same region as the Supabase project |
+| Root Directory | Left empty (the repository root) |
+| Runtime | Node |
+| Build Command | `npm ci --prefix server` |
+| Start Command | `npm start --prefix server` |
+| Health Check Path | `/health` |
+| Instance type | Free |
+
+**Environment variables** (set in Render under **Environment**, never committed to the repository):
+
+| Variable | Value |
+|---|---|
+| `SUPABASE_URL` | The Supabase project URL |
+| `SUPABASE_PUBLISHABLE_KEY` | The Supabase publishable key |
+| `GEMINI_API_KEY` | A Gemini API key used only for the deployed site |
+
+`PORT` is provided by Render automatically. `CLIENT_ORIGIN` is not needed, because the pages and the API are served from the same address.
+
+### Supabase redirect settings for the live site
+
+After deploying, the live address must be added in the Supabase Dashboard under **Authentication → URL Configuration** (see step 2 of Getting Started):
+
+- **Site URL:** `https://fridgemate-api-6eqf.onrender.com/login.html`
+- **Redirect URLs:** `https://fridgemate-api-6eqf.onrender.com/**`
+
+When the site was first deployed this step had been missed. Supabase does not send users to addresses that are not on its list, so it fell back to the local development Site URL: password reset links opened `127.0.0.1:5500` instead of the live site, and the live site also failed to save ingredients. Adding the live address to the Redirect URLs fixed both problems.
+
+### Updating the live site
+
+If the service is connected to GitHub, Render redeploys automatically when changes are merged into `main`. If it was created from a public repository URL instead, choose **Manual Deploy → Deploy latest commit** in the Render Dashboard after each merge.
+
+### Free tier behaviour
+
+- The service goes to sleep after 15 minutes without visits. The next visit wakes it up, which can take up to a minute. Opening the site a minute before a demonstration avoids the wait.
+- Render's free tier is intended for testing and demonstrations, not for a service with real users.
+
+### After the demonstration
+
+To stop the live site and the costs or data flows linked to it:
+
+1. Suspend or delete the service in the Render Dashboard.
+2. Delete the Gemini API key used by the deployed site in Google AI Studio.
+3. Remove the live address from the Supabase Redirect URLs.
 
 ---
 
@@ -539,7 +599,7 @@ FridgeMate is a bootcamp demonstration project, not a commercial service. The fu
 |---|---|---|
 | Supabase (Frankfurt, EU) | Everything above | Login and database |
 | Google Gemini API | Ingredients, dietary requirements, cooking time and extra ingredients (no email address or name) | Creating recipes |
-| Web host (if deployed) | Requests to the website and server | Running the site |
+| Render (Frankfurt, EU) | Requests to the website and server | Hosting the live site |
 
 **Deleting your account:** email **[alyswilliams1@outlook.com](mailto:alyswilliams1@outlook.com)** from the address you signed up with. Accounts are deleted within one month of a request. Deleting an account also deletes that user's ingredients, recipes and favourites, because every table is linked to the account and set to delete with it.
 
@@ -557,7 +617,7 @@ FridgeMate is only intended for demonstration by the project team. These points 
 - **Self-service account deletion.** A "Delete my account" button on the profile page was considered. For the demonstration, deletion is handled by email request instead, which meets the requirement to act on erasure requests within one month.
 - **Sensitive dietary preferences.** Preferences such as gluten-free or nut-free can reveal health conditions, and vegan or vegetarian can reveal beliefs, which UK data protection law treats as special category data. They are optional and only used to tailor recipes. A public version would ask for explicit consent before saving them.
 - **Data retention.** Every generated recipe is kept until the account is deleted. A public version would need a defined retention period, for example removing inactive accounts after a set time.
-- **Data location.** The Supabase project is hosted in Frankfurt (EU). The web host should also use an EU or UK region where possible.
+- **Data location.** The Supabase project and the Render web service are both hosted in Frankfurt (EU).
 - **Data minimisation.** Only the data needed to run the app is collected. There is no advertising, analytics or tracking, and only the session needed to stay logged in is stored in the browser.
 
 ---
@@ -569,7 +629,8 @@ FridgeMate is only intended for demonstration by the project team. These points 
 - Dietary preferences are provided to Gemini as recipe-generation requirements, but AI-generated recipes cannot guarantee that a meal is free from allergens or unsuitable ingredients. Always check ingredient labels and verify recipes independently.
 - Expiry dates and recipe suggestions are intended to help with food management, not to determine whether food is safe to consume.
 - Recipe generation requires an active internet connection and a valid Gemini API key.
-- Gemini API availability and usage limits may affect recipe generation.
+- Gemini API availability and usage limits may affect recipe generation. The message "Our recipe service is busy right now" means Google's servers were overloaded (HTTP 503), not that FridgeMate's own usage limit was reached; trying again after a short wait usually works.
+- The live site runs on Render's free tier, so the first request after 15 minutes of inactivity can take up to a minute.
 - **Privacy:** to create recipes, the user's ingredients, dietary requirements, cooking time and extra ingredients are sent to Google's Gemini API. Email addresses and names are not sent. See the "Your Data and Deleting Your Account" section above.
 - Supabase's built-in email service only sends a small number of emails per hour, so verification and password reset emails may be delayed or refused during heavy testing.
 - Leaked password protection (checking new passwords against known data breaches) requires a paid Supabase plan and is not enabled.
@@ -595,6 +656,7 @@ Potential areas for further development include:
 - Enabling the Gemini paid tier, a consent step for dietary preferences and a data retention period before any public launch.
 - Splitting the recipe-generation route into one file per step (login check, preferences, inventory, prompt, AI call, saving).
 - Sharing code that is currently repeated across pages, such as the password rules and ingredient cards.
+- Automatically retrying recipe generation, with a short delay, when Google's servers are busy (HTTP 503).
 - Additional automated testing and backend security improvements.
 
 ---
